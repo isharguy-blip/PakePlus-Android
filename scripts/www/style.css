@@ -1,0 +1,1860 @@
+/* ============================================================
+   教员台 · 个人课程管理系统 —— style.css（一期 1.1 工程骨架）
+   设计约束：零外链（R1）；桌面端优先（D8）；图标统一内联 SVG（R3）
+   ============================================================ */
+
+/* ---------- 设计变量（一期仅亮色主题，theme 字段已入 settings 备扩展） ---------- */
+:root {
+  /* W6-0 设计地基（v1.91）：色彩语义沿用拍板①干净工具风；主色 #2f6fed 不动；
+     四点五审美参考落地——卡片圆角 12px 统一、阴影降透明、背景仅微调为暖灰绿倾向。 */
+  --color-bg:            #f3f5f4;
+  --color-surface:       #ffffff;
+  --color-border:        #e3e6ea;
+  --color-text:          #24292f;
+  --color-text-secondary:#59636e;
+  --color-primary:       #2f6fed;
+  --color-primary-hover: #245bcc;
+  --color-primary-soft:  #eaf1fe;
+  --color-danger:        #d64545;
+  /* 间距栅格：4 / 8 基准，向上按 12 / 16 / 20 / 24 / 32 / 40 扩展 */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  /* 字号层级：caption / body / title / data 逐级收口 */
+  --text-2xs: 10px;
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-md: 13px;
+  --text-base: 14px;
+  --text-lg: 15px;
+  --text-xl: 16px;
+  --text-2xl: 17px;
+  --text-3xl: 18px;
+  --text-4xl: 20px;
+  --text-5xl: 24px;
+  /* 圆角：卡片 12 / 控件 8 / 小型嵌入控件 6；999px 统一为 pill */
+  --radius-card: 12px;
+  --radius-control: 8px;
+  --radius-small: 6px;
+  --radius-dot: 4px;
+  --radius-key: 5px;
+  --radius-pill: 999px;
+  /* 阴影：悬浮纸面感降透明、轻投影 */
+  --shadow-card:         0 1px 8px rgba(31, 41, 55, .045);
+  --shadow-pop:          0 6px 24px rgba(31, 41, 55, .10);
+  /* z-index 层级表：sticky 导航 / 横幅 / 帮助 / skip / 模态 */
+  --z-sticky: 50;
+  --z-grid-head: 2;
+  --z-grid-day: 3;
+  --z-grid-corner: 4;
+  --z-dropdown: 20;   /* W6-3 周格批：翻周条「更多」下拉浮层 */
+  --z-banner: 100;
+  --z-help: 110;
+  --z-skip: 120;
+  --z-modal: 130;
+  /* 按钮两尺寸口径（W6-0 拍板③）：常规 36 / 紧凑 30 */
+  --btn-height-regular: 36px;
+  --btn-height-compact: 30px;
+  /* 断点命名表（自定义属性不参与媒体查询求值；媒体查询字面量不动，此表为施工命名锚） */
+  --bp-topbar: 1100px;
+  --bp-tablet: 900px;
+  --bp-data: 800px;
+  --bp-mobile: 640px;
+  --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+}
+
+/* ---------- 基础重置 ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; }
+
+body {
+  font-family: var(--font-stack);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font-family: inherit; }
+
+/* ============================================================
+   首次启动向导
+   ============================================================ */
+.wizard-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+.wizard-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-pop);
+  padding: 32px 36px 36px;
+}
+
+.wizard-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+  color: var(--color-primary);
+}
+
+.wizard-card h1 {
+  font-size: var(--text-4xl);
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.wizard-card .wizard-sub {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--text-md);
+  margin-bottom: 24px;
+}
+
+.wizard-form .field { margin-bottom: var(--space-4); }
+
+.wizard-form .field label {
+  display: block;
+  font-size: var(--text-md);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.wizard-form .field input {
+  width: 100%;
+  padding: 9px 12px;
+  font-size: var(--text-base);
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.wizard-form .field input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.wizard-error {
+  font-size: var(--text-md);
+  color: var(--color-danger);
+  margin-bottom: 12px;
+  min-height: 20px;
+}
+
+.btn-primary {
+  width: 100%;
+  min-height: var(--btn-height-regular);
+  padding: 0 var(--space-4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: #fff;
+  background: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.btn-primary:hover { background: var(--color-primary-hover); }
+
+/* ============================================================
+   主界面壳：顶部栏 + 内容区（1.1 仅空状态占位）
+   ============================================================ */
+.app-shell { min-height: 100vh; display: flex; flex-direction: column; }
+
+/* ---------- 顶部栏 ---------- */
+.topbar {
+  height: 52px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0 var(--space-5);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xl);
+  font-weight: 600;
+}
+
+.topbar-brand svg { color: var(--color-primary); }
+
+.topbar-center {
+  flex: 1;
+  text-align: center;
+  font-size: var(--text-md);
+  color: var(--color-text-secondary);
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.save-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3fb950;
+}
+
+.save-dot.save-failed { background: var(--color-danger); }
+
+/* 四期⑦ U27：写入瞬态「保存中…」——呼吸灯（写入完成/失败由 updateSaveIndicator 退出此态） */
+@keyframes save-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .45; }
+}
+
+.save-dot.save-saving { background: var(--color-primary); animation: save-breathe 1.2s ease-in-out infinite; }
+
+/* ---------- 内容区 ---------- */
+.main-area {
+  flex: 1;
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--color-text-secondary);
+  padding: 40px;
+}
+
+.empty-state svg {
+  color: var(--color-border);
+  margin-bottom: var(--space-4);
+}
+
+.empty-state h2 {
+  font-size: var(--text-xl);
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 6px;
+}
+
+.empty-state p { font-size: var(--text-md); }
+
+/* ---------- 横幅（非破坏性提醒，遵守 R7 不弹窗） ---------- */
+.banner {
+  position: fixed;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--space-2) 18px;
+  font-size: var(--text-md);
+  color: var(--color-text);
+  background: #fff8e6;
+  border: 1px solid #f0d48a;
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-card);
+  z-index: var(--z-banner);
+  white-space: pre-line;   /* 四期⑦：横幅堆叠队列（上限 3）多行承载——join('\n') 分行渲染 */
+}
+
+/* ============================================================
+   W6-7 横幅分级（拍板⑤＋UX 裁决 #49/#50）：容器类由队列最高层级决定
+   （renderBannerQueue；error > warn > success > info）。
+   成功/警告/错误三级走既有 badge 色系（#e6f6ec/#fdecea/#f0d48a 等），
+   仅 warn 背景微增一色——info（提醒）视觉逐字节不变（基线基石）。
+   ============================================================ */
+.banner-success { background: #e6f6ec; border-color: #9fd8b2; }
+.banner-warn { background: #fdf3d7; border-color: #e3b341; }
+.banner-error { background: #fdecea; border-color: #f0a8a3; }
+
+
+/* ============================================================
+   校历管理面板（一期 1.2 新增；既有规则未改动）
+   ============================================================ */
+
+/* ---------- 顶栏视图导航按钮 ---------- */
+.topbar-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* W6-2 顶栏视觉分层（v1.92，拍板②）：当前项实心主色、未选中项透明弱化、悬停 soft 层——
+   9 员不分组、短名与 aria-current 语义逐字不动；类名保留（渲染串零改动、既有断言不破） */
+.btn-topbar {
+  min-height: var(--btn-height-compact);
+  padding: 0 var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-md);
+  font-family: inherit;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  transition: color .15s, background .15s;
+}
+
+.btn-topbar:hover { color: var(--color-primary); background: var(--color-primary-soft); }
+
+.btn-topbar.active {
+  color: #fff;
+  font-weight: 600;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* ---------- 校历管理：面板头 + 校历卡片列表 ---------- */
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.panel-head h2 { font-size: var(--text-2xl); font-weight: 600; }
+
+.btn-primary.btn-auto { width: auto; padding: 0 var(--space-4); }
+
+/* 四期⑦：删除类危险操作按钮——危险色描边 + 悬停实心（与 btn-sec 同尺寸口径，仅色相区分） */
+.btn-danger {
+  min-height: var(--btn-height-compact);
+  padding: 0 var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-md);
+  font-family: inherit;
+  color: var(--color-danger);
+  background: var(--color-surface);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  transition: color .15s, background .15s, border-color .15s;
+}
+
+.btn-danger:hover { color: #fff; background: var(--color-danger); }
+
+.cal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: var(--space-5);
+}
+
+.cal-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 14px 18px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  min-width: 0;   /* 四期⑤ B.11-U4：flex 子项溢出兜底——归零后由 cal-card-meta 省略号收口 */
+}
+
+.cal-card.current { border-color: var(--color-primary); }
+
+.cal-card-main { flex: 1; min-width: 0; }
+
+.cal-card-name {
+  font-size: var(--text-base);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.cal-badge {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+  border-radius: var(--radius-pill);
+  padding: 1px 8px;
+}
+
+.cal-card-meta { font-size: var(--text-sm); color: var(--color-text-secondary); margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }   /* 四期⑤ B.9-5.4：长文本不换行撑卡，省略号收口 */
+
+.cal-card-actions { display: flex; align-items: center; gap: var(--space-2); flex: none; }
+
+/* ---------- 通用次级按钮（与顶栏按钮同风格，列表操作用） ---------- */
+.btn-sec {
+  min-height: var(--btn-height-compact);
+  padding: 0 var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-md);
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+}
+
+.btn-sec:hover { color: var(--color-primary); border-color: var(--color-primary); }
+
+/* W6-0 按钮两尺寸修饰类（未来调用点显式指定；存量调用零改动由上方默认口径收敛） */
+.btn-regular { min-height: var(--btn-height-regular); }
+.btn-compact { min-height: var(--btn-height-compact); }
+.btn-icon.btn-regular { width: var(--btn-height-regular); height: var(--btn-height-regular); }
+.btn-icon.btn-compact { width: var(--btn-height-compact); height: var(--btn-height-compact); }
+
+/* ---------- 校历表单 ---------- */
+.cal-form-card {
+  padding: var(--space-5) var(--space-6);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.cal-form-card h3 { font-size: var(--text-lg); font-weight: 600; margin-bottom: var(--space-4); }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--space-5);
+}
+
+.form-grid .full { grid-column: 1 / -1; }
+
+.cal-form .field { margin-bottom: 14px; }
+
+.cal-form .field label {
+  display: block;
+  font-size: var(--text-md);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.cal-form .field input[type="text"],
+.cal-form .field input[type="date"],
+.cal-form .field input[type="month"],
+.cal-form .field input[type="number"],
+.cal-form .field select {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-base);
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.cal-form .field input:focus,
+.cal-form .field select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+/* 停课周多选 chips（checkbox 隐藏，点选 chip 即勾选） */
+.breaks-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.break-chip { position: relative; }
+
+.break-chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.break-chip span {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: color .15s, border-color .15s, background .15s;
+}
+
+.break-chip span:hover { border-color: var(--color-primary); }
+
+.break-chip input:checked + span {
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
+}
+
+/* W4-B #60：隐藏 checkbox 键盘焦点可视（与 .week-dot/.color-swatch 同口径） */
+.break-chip input:focus-visible + span {
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+/* 12 节时刻表 */
+.period-table {
+  width: 100%;
+  max-width: 480px;
+  border-collapse: collapse;
+  font-size: var(--text-md);
+}
+
+.period-table th, .period-table td {
+  text-align: left;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.period-table th { color: var(--color-text-secondary); font-weight: 500; }
+
+.period-table input {
+  width: 110px;
+  padding: 5px 8px;
+  font-size: var(--text-md);
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  outline: none;
+}
+
+.period-table input:focus { border-color: var(--color-primary); }
+
+/* 表单错误与操作行（复用向导的错误语义） */
+.form-error {
+  font-size: var(--text-md);
+  color: var(--color-danger);
+  min-height: 20px;
+  margin: 4px 0 10px;
+}
+
+.form-actions { display: flex; align-items: center; gap: 10px; }
+/* ============================================================
+   课程管理面板（一期 1.3 新增；列表卡片复用 .cal-card 体系）
+   ============================================================ */
+
+/* 分区小标题（开设中 / 已归档） */
+.section-subtitle { font-size: var(--text-base); font-weight: 600; margin: var(--space-5) 0 var(--space-3); }
+#courseFormWrap:empty + .section-subtitle { margin-top: 0; }
+
+/* 课程色块圆点（调色板自动分配的颜色） */
+.course-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-dot);
+  flex: none;
+}
+
+/* 课程卡名称行：色点名 + 名称 + 角标对齐 */
+.course-card-name { display: flex; align-items: center; gap: var(--space-2); }
+
+/* W4-D（UX 裁决 #38，v1.78 拍板④）：归档/停用改「角标 + 弱化背景」——去整卡 opacity
+   （整卡变淡降低可读性且干扰操作按钮），类名保留（渲染与既有断言不动），
+   弱化只落背景色，角标（badge-archived「已归档/已停用」）承担状态语义 */
+.cal-card.archived, .cal-card.rule-off { background: var(--color-bg); }
+
+.badge-archived {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 1px 8px;
+}
+
+/* 课程空状态：复用 empty-state 文字样式，套卡片壳 */
+.course-empty {
+  padding: var(--space-6);
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-card);
+}
+
+/* 表单提示行（说明颜色自动分配 / 二期能力，避免用户疑惑） */
+.form-hint {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--space-3);
+}
+
+/* ============================================================
+   排课项面板（一期 1.4 新增；卡片/表单均复用既有体系）
+   ============================================================ */
+
+/* 「第 X 至 Y」成对控件（节次下拉 / 周次范围输入） */
+.period-pair { display: flex; align-items: center; gap: 6px; }
+.period-pair select, .period-pair input { flex: 1; min-width: 0; width: auto; }
+.period-pair .pair-sep { flex: none; font-size: var(--text-md); color: var(--color-text-secondary); }
+
+/* 编辑态下不可改字段（如课程归属）的静态展示块 */
+.form-static {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+}
+
+/* ============================================================
+   周格课表视图（一期 1.6 新增；占位区样式已随实现一并移除，R5）
+   ============================================================ */
+
+/* 翻周条：图标按钮（chevron）+ 文字按钮 + 周次标题 */
+.weekbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.weekbar-nav { display: flex; align-items: center; gap: 6px; }
+
+.btn-icon {
+  width: var(--btn-height-compact);
+  height: var(--btn-height-compact);
+  min-height: var(--btn-height-compact);
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+}
+
+.btn-icon:hover { color: var(--color-primary); border-color: var(--color-primary); }
+
+.weekbar-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.weekbar-range { font-size: var(--text-md); font-weight: 400; color: var(--color-text-secondary); }
+
+/* 四期⑥ 周次跳转输入（B.10-1.2）：翻周条内小输入框，与 btn-sec 同排对齐 */
+.week-jump-input {
+  width: 58px;
+  padding: 5px 8px;
+  font-size: var(--text-sm);
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  outline: none;
+}
+
+.week-jump-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+/* ============================================================
+   W6-3 周格批：翻周条「更多」下拉（打印 / 周末列收纳——主操作唯一；
+   纯 CSS 展开：hover + focus-within，触屏点按按钮即可展开，零脚本增量）
+   ============================================================ */
+.more-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.more-menu {
+  position: absolute;
+  top: 34px;
+  right: 0;
+  min-width: 150px;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-pop);
+  z-index: var(--z-dropdown);
+}
+
+/* W6-6 列表批（2026-09-21）：排课卡/课程卡/规则卡的「更多」收纳直接复用本体系——
+   .more-wrap 自带 position:relative 锚点、.more-menu absolute 右对齐，落入
+   .cal-card-actions 弹性行即可用；菜单项视觉由 .more-menu button 规则统一接管
+   （按钮自身 btn-sec/btn-danger 类串保留给既有断言，层叠上 more-menu 规则优先）。 */
+.more-wrap:hover .more-menu,
+.more-wrap:focus-within .more-menu {
+  display: flex;
+}
+
+.more-menu button {
+  width: 100%;
+  min-height: var(--btn-height-compact);
+  padding: 4px 10px;
+  text-align: left;
+  font-size: var(--text-md);
+  font-family: inherit;
+  color: var(--color-text);
+  background: none;
+  border: none;
+  border-radius: var(--radius-small);
+  cursor: pointer;
+}
+
+.more-menu button:hover {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+/* 周格网格：gap 1px + 边框色底，格线即间隙；色块跨行覆盖间隙（CSS Grid 覆盖语义） */
+.weekgrid-wrap {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 12px;
+  overflow-x: auto;
+}
+
+.weekgrid {
+  display: grid;
+  /* 列数由 app.js 渲染时注入 --wg-cols（插单 1.12：周末列按需显示，默认 5 列；缺省 7 兼容） */
+  grid-template-columns: 56px repeat(var(--wg-cols, 7), minmax(92px, 1fr));
+  gap: 1px;
+  background: var(--color-border);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  overflow: hidden;
+  overflow: clip;   /* W3 #43：hidden 会自建滚动容器截断 sticky 参照，clip 不建——冻结列生效，静止视觉逐字节一致 */
+  /* min-width 随列数联动：7 列 = 780px，与 1.6 既有值一致（136 + 7×92） */
+  min-width: calc(136px + var(--wg-cols, 7) * 92px);
+}
+
+.wg-corner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  background: #f8f9fb;
+}
+
+.wg-dayhead {
+  text-align: center;
+  padding: 6px 4px;
+  font-size: var(--text-md);
+  font-weight: 600;
+  background: #f8f9fb;
+}
+
+.wg-dayhead span {
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: 400;
+  color: var(--color-text-secondary);
+}
+
+.wg-dayhead.today { background: var(--color-primary-soft); color: var(--color-primary); }
+.wg-dayhead.today span { color: var(--color-primary); font-weight: 600; }
+
+.wg-period {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 0;
+  background: #f8f9fb;
+}
+
+.wg-period-no { font-size: var(--text-sm); font-weight: 600; }
+.wg-period-time { font-size: var(--text-2xs); color: var(--color-text-secondary); }
+
+.wg-cell { min-height: 44px; background: var(--color-surface); }
+.wg-cell.today { background: #f4f8ff; }
+
+/* 课程色块：调色板实边 + 同色系淡底（色值 1F 透明度内联生成，零依赖） */
+.wg-block {
+  margin: 2px;
+  padding: 3px 7px;
+  border-radius: var(--radius-small);
+  border-left: 3px solid;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  overflow: hidden;
+}
+
+.wg-block-name {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wg-block-meta {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* W6-3 周格批：次信息行（原定日期 / 补课说明）——更弱更小，单行省略收口 */
+.wg-block-sub {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  opacity: .85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 流水状态角标（调课 / 临时停课 / 补课） */
+.wg-tag { font-size: var(--text-2xs); font-weight: 500; border-radius: var(--radius-pill); padding: 0 5px; flex: none;
+  border: 1px solid currentColor; }   /* 四期⑤ B.9-5.7：同色细边框与预览表角标（paste-badge）语境区分，不新增色板 */
+.tag-makeup { color: #1a7f37; background: #e6f6ec; }
+.tag-moved { color: #9a6700; background: #fff8e6; }
+.tag-canceled { color: #59636e; background: #eef1f4; }
+
+.wg-block.is-canceled { opacity: .55; }
+.wg-block.is-canceled .wg-block-name { text-decoration: line-through; }
+
+/* 校历级停课角标（Q2 纯投影）：虚线格 + 「停课」小签 */
+/* W6-3 周格批：停课角标增强——「校历停课」签 + 删除线课程名（Q2 投影语义不变，纯视觉） */
+.wg-break {
+  margin: 2px;
+  border: 1px dashed #e3b341;
+  background: #fff8e6;
+  border-radius: var(--radius-small);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 6px;
+  gap: 2px;
+}
+
+.wg-break-tag {
+  font-size: var(--text-xs);
+  color: #9a6700;
+  background: #faeec7;
+  border-radius: var(--radius-pill);
+  padding: 0 8px;
+  height: 18px;
+  line-height: 18px;
+}
+
+.wg-break-name {
+  font-size: var(--text-xs);
+  color: #9a6700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  text-decoration: line-through;
+}
+
+/* 空周提示 */
+.week-empty {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--text-md);
+  padding: 14px 0 2px;
+}
+
+
+/* ============================================================
+   今日模式 + 流水操作（一期 1.7 新增；复用卡片/表单/btn 体系）
+   ============================================================ */
+
+/* 今日课程清单：挂在周格下方的独立卡片 */
+.today-panel {
+  margin-top: var(--space-4);
+  padding: 14px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.today-title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-bottom: 6px;
+}
+
+.today-sub { font-size: var(--text-sm); font-weight: 400; color: var(--color-text-secondary); }
+
+/* 流水行：整行可点（展开操作区）；激活态描边高亮 */
+.today-row {
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+
+.today-row:hover { background: var(--color-bg); }
+.today-row.active { border-color: var(--color-primary); background: var(--color-primary-soft); }
+
+.today-line { display: flex; align-items: center; gap: 10px; padding: 8px 10px; }
+.today-main { flex: 1; min-width: 0; }
+.today-name { font-size: var(--text-md); font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.today-meta { font-size: var(--text-sm); color: var(--color-text-secondary); }
+.today-caret { display: inline-flex; color: var(--color-text-secondary); flex: none; }
+
+/* 操作区：行内展开灰底卡片；表单字段复用 .cal-form 体系 */
+.today-ops { margin: 0 8px 10px; padding: 12px 14px; background: var(--color-bg); border-radius: var(--radius-control); }
+.today-ops-btns { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+.today-empty { font-size: var(--text-md); color: var(--color-text-secondary); padding: 8px 2px; }
+
+/* ============================================================
+   数据管理面板（一期 1.8 新增；复用卡片/btn/form-error 体系）
+   ============================================================ */
+
+/* 导出/导入双卡并排（D8 桌面端优先） */
+.data-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--space-4);
+  align-items: start;
+}
+
+.data-card {
+  padding: var(--space-5) var(--space-6);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.data-card h3 { font-size: var(--text-lg); font-weight: 600; margin-bottom: 8px; }
+
+.data-desc { font-size: var(--text-sm); color: var(--color-text-secondary); margin-bottom: 14px; }
+
+.data-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+/* 原生文件选择框不可深度样式化，仅约束字号与颜色，与面板协调 */
+.data-actions input[type="file"] { font-size: var(--text-sm); color: var(--color-text-secondary); }
+
+/* 导入预览表：冲突计数高亮提醒（R7 不弹窗） */
+.import-preview { margin-top: 14px; }
+
+.import-preview table { width: 100%; border-collapse: collapse; font-size: var(--text-md); }
+
+.import-preview th, .import-preview td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.import-preview th { color: var(--color-text-secondary); font-weight: 500; }
+
+.conflict-num { color: #9a6700; font-weight: 600; }
+
+/* ============================================================
+   粘贴导入（一期 1.9 新增；复用 cal-form-card / import-preview 体系）
+   ============================================================ */
+.paste-card { margin-bottom: var(--space-4); }
+
+.paste-textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: var(--space-2) var(--space-3);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  outline: none;
+  resize: vertical;
+  margin-bottom: 12px;
+}
+
+.paste-textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+/* 预览行状态角标（新增 / 待新建课程 / 已存在重复 / 类似已存在） */
+.paste-badge {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  border-radius: var(--radius-pill);
+  padding: 1px 8px;
+  margin-left: 6px;
+  white-space: nowrap;
+}
+
+.badge-new { color: #1a7f37; background: #e6f6ec; }
+.badge-newcourse { color: var(--color-primary); background: var(--color-primary-soft); }
+.badge-dup { color: #59636e; background: #eef1f4; }
+.badge-warn { color: #9a6700; background: #fff8e6; }
+.badge-error { color: #b42318; background: #fdecea; }
+
+.paste-hours {
+  width: 64px;
+  padding: 4px 6px;
+  font-size: var(--text-sm);
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  outline: none;
+}
+
+.paste-assign {
+  max-width: 200px;
+  padding: 3px 6px;
+  font-size: var(--text-sm);
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  outline: none;
+}
+
+.paste-reject-row td { color: var(--color-danger); font-size: var(--text-sm); }
+
+
+/* ============================================================
+   规则坊（二期 2.1 新增；表单/卡片复用 cal-form-card / cal-card 体系）
+   ============================================================ */
+
+/* 因子行：勾选框 + 类型系数行 + 常数覆盖输入，单行对齐可换行 */
+.factor-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.factor-row .factor-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-md);
+  font-weight: 500;
+}
+
+.factor-row input[type="number"] {
+  width: 90px;
+  padding: 6px var(--space-3);
+  font-size: var(--text-md);
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  outline: none;
+}
+
+.factor-row input[type="number"]:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.factor-hint { font-size: var(--text-sm); color: var(--color-text-secondary); }
+
+/* 类型系数行（行内标签 + 小输入） */
+.coef-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.coef-row label { font-size: var(--text-md); }
+
+.coef-input {
+  width: 90px;
+  padding: 6px var(--space-3);
+  font-size: var(--text-md);
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  outline: none;
+}
+
+.coef-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+/* 阶梯表窄输入 */
+.rule-tier-input {
+  width: 80px;
+  padding: 5px 8px;
+  font-size: var(--text-md);
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  outline: none;
+}
+
+.rule-tier-input:focus { border-color: var(--color-primary); }
+
+/* ============================================================
+   统计面板（二期 2.2 新增；表格复用 import-preview 体系）
+   ============================================================ */
+
+/* 统计卡四格：等宽网格，数值大字号 + 小单位（D8 桌面端优先） */
+/* 四期⑪ 主三卡（总学时/理论/实训）：3 列；结算/条数/门数降为卡下次级行 .stat-sub */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: var(--space-4);
+  margin-bottom: 8px;
+}
+
+.stat-card {
+  padding: 16px 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.stat-label { font-size: var(--text-md); color: var(--color-text-secondary); }
+
+.stat-num { font-size: var(--text-5xl); font-weight: 600; margin-top: 4px; }
+
+.stat-unit {
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  margin-left: 4px;
+}
+
+/* 四期⑪ 统计卡次级行：已上流水/门数/结算口径（结算全空显「—」，D10/R6） */
+.stat-sub {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--space-5);
+}
+
+/* 钻取明细区：挂在汇总表下方，与汇总表留间距 */
+.stats-drill { margin-top: var(--space-4); }
+
+/* ============================================================
+   课程色板选择器（插单 1.13：默认自动分配 + 8 色点选覆盖；不开放自由色值）
+   ============================================================ */
+
+/* 色板容器：与 .breaks-grid 同节奏排布 */
+.color-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+/* 色块 swatch：radio 隐身（复用 .break-chip 模式），点选即勾选 */
+.color-swatch { position: relative; }
+
+.color-swatch input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.color-swatch .swatch {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-small);
+  border: 2px solid var(--color-border);
+  cursor: pointer;
+  transition: border-color .15s, transform .15s;
+}
+
+.color-swatch .swatch:hover { transform: scale(1.1); }
+
+.color-swatch input:checked + .swatch { border-color: var(--color-text); }
+
+.color-swatch input:focus-visible + .swatch {
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+/* ============================================================
+   统计筛选区分区收纳（插单 1.25：仅组标题节奏，复用面板色系，零其余新增）
+   ============================================================ */
+.filter-group-title { font-size: var(--text-md); font-weight: 600; margin: 0 0 8px; }
+.filter-group-sep { border-top: 1px solid var(--color-border); margin-top: 14px; padding-top: 12px; }
+
+/* ============================================================
+   四期⑤ 移动端与响应式批（2026-09-19；B.9–B.12 之⑤落点，纯样式层增量）
+   ============================================================ */
+
+/* B.11-U1：顶栏中等屏间距收敛（9 入口顶栏在 1100px 以下逐级收紧，防拥挤） */
+@media (max-width: 1100px) {
+  .topbar { gap: 10px; padding: 0 12px; }
+  .topbar-nav { gap: var(--space-1); }
+  .btn-topbar { padding: 5px 8px; font-size: var(--text-sm); }
+}
+
+/* B.9-5.1：统计卡四格 → ≤900px 降 2 列 */
+@media (max-width: 900px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* B.9-5.2：数据面板双卡 → ≤800px 单列 */
+@media (max-width: 800px) {
+  .data-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   三期 3.0d 移动端业绩快速录入（≤640px 窄屏重排；桌面宽屏逐字节不变）
+   ============================================================ */
+@media (max-width: 640px) {
+  .main-area { padding: 14px; }
+  .form-grid { grid-template-columns: 1fr; }
+
+  /* W3 #131：窄屏横滚只作用表格内容区——卡片整体不再横向漂移（打印侧已回正 overflow:visible，不受影响） */
+  .import-preview { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  /* W3 #279 安全区适配：刘海屏 / 手势条内边距（env 不支持的环境自动忽略该声明） */
+  body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+  .topbar { padding-left: max(12px, env(safe-area-inset-left)); padding-right: max(12px, env(safe-area-inset-right)); }
+  .mobile-nav { padding-left: max(14px, env(safe-area-inset-left)); padding-right: max(14px, env(safe-area-inset-right)); }
+  .main-area { padding-bottom: env(safe-area-inset-bottom); }
+
+  /* 四期⑤ B.9-5.5：窄屏点阵按容器 10 等分（不再固定 26px 圆点节奏） */
+  .weekmatrix { grid-template-columns: repeat(10, 1fr); width: auto; }
+
+  /* 四期⑤ B.11-U32：date/month 输入框窄屏宽度适配——成对控件可收缩、不撑破表单 */
+  input[type="date"], input[type="month"] { max-width: 100%; }
+  .period-pair input[type="date"], .period-pair input[type="month"] { min-width: 0; }
+  .achv-quick-textarea { min-height: 130px; font-size: var(--text-xl); }
+  .achv-quick-tabs { display: flex; gap: var(--space-2); margin: 4px 0 2px; }
+  .achv-quick-tabs .btn-sec.active {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    background: var(--color-primary-soft);
+  }
+}
+
+/* ============================================================
+   周次点阵选择器（三期 3.1d：自定义周次 chips → 点阵；纯 UI 增量，R4 零迁移）
+   ============================================================ */
+
+/* 点阵容器：10 列一行（≤30 周最多 3 行），圆点节奏与 .breaks-grid 同间隙 */
+.weekmatrix {
+  display: grid;
+  grid-template-columns: repeat(10, 26px);   /* 四期⑤ B.9-5.5：严格 10 列一行（≤30 周 3 行），行宽 332px */
+  gap: var(--space-2);
+  width: max-content;
+}
+
+/* 周点：radio 隐身（复用 .break-chip 模式），点内周号、悬停放大、title 提示 */
+.week-dot { position: relative; }
+
+.week-dot input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.week-dot span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  user-select: none;
+  transition: color .15s, border-color .15s, background .15s, transform .15s;
+}
+
+.week-dot span:hover { transform: scale(1.12); border-color: var(--color-primary); }
+
+.week-dot input:checked + span {
+  color: #fff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.week-dot input:focus-visible + span {
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+/* ============================================================
+   四期 · 吸收项①：周格色块点击直达编辑（纯 UI 增量，与既有 wg-block 体系同风格，R3）
+   ============================================================ */
+.wg-block.clickable { cursor: pointer; }
+.wg-block.clickable:hover { filter: brightness(.96); }
+
+/* ============================================================
+   四期 · ②打印版式（@media print：隐藏操作层，直出周课表 / 今日清单 / 统计表；
+   纯样式层，零数据逻辑；四期② 2026-09-19）
+   ============================================================ */
+.print-echo { display: none; }   /* 打印口径回显行：屏幕隐藏、打印显示 */
+
+@media print {
+  body { background: #fff; font-size: var(--text-sm); }   /* 四期⑤ B.9-5.3：打印字号整体下调，A4 容 7 列不挤 */
+  .main-area { padding: 0; }
+
+  /* 操作层清场：顶栏 / 横幅 / 翻周按钮组 / 一切按钮 / 行内操作区 */
+  .topbar, .banner, .weekbar-nav, .today-ops,
+  button, .form-actions { display: none !important; }
+
+  /* 周格：去卡片壳、列宽自适应纸面（模板列宽经 --wg-cols 覆盖为 minmax(0,1fr)） */
+  .weekgrid-wrap { border: none; box-shadow: none; padding: 0; overflow: visible; }
+  .weekgrid {
+    grid-template-columns: 40px repeat(var(--wg-cols, 7), minmax(0, 1fr));
+    min-width: 0;
+  }
+  /* W6-3 周格批：打印色块边界兜底——不依赖「背景图形」开关，无背景时仍可见块范围
+     （内联背景带不出打印的问题根治：课程色左边条 3px + 淡灰细边框） */
+  .wg-block { break-inside: avoid; border: 1px solid #999; border-left: 3px solid; }
+  /* 四期⑤ B.9-5.3：色块名称/meta 打印允许换行（屏幕单行省略号口径不带上纸面） */
+  .wg-block-name, .wg-block-meta { white-space: normal; overflow: visible; text-overflow: clip; }
+
+  /* 今日清单 / 统计卡：去阴影、实边框、防跨页断裂 */
+  .today-panel, .stat-card { box-shadow: none; border-color: #999; }
+  .today-panel { margin-top: 10px; }
+  .stats-grid { grid-template-columns: repeat(3, 1fr); column-gap: var(--space-2); margin-bottom: 6px; }
+  .stat-card { padding: var(--space-2) var(--space-3); }
+  .stat-num { font-size: var(--text-3xl); }
+
+  /* 四期⑤ B.11-U6：表单类卡片整体不进打印（改前仅隐筛选折叠卡，口径扩为 :not(.print-keep)
+     全量排除，.print-keep 为未来显式豁免口）；统计口径由 print-echo 承载；钻取明细不带上 */
+  .cal-form-card:not(.print-keep) { display: none; }
+  .stats-drill { display: none; }
+  /* 四期⑤ B.11-U3 伴生回正：窄屏 overflow-x 横滚规则不带入打印，恢复纸面自然铺开 */
+  .import-preview, .cal-form-card, .data-card, .cal-card { overflow: visible; }
+  .import-preview table { break-inside: avoid; }
+  .print-echo { display: block; font-size: var(--text-sm); color: #333; margin: 0 0 var(--space-3); }
+  .section-subtitle { margin: 10px 0 6px; }
+}   /* W0 #1 修复（2026-09-19）：@media print 在此正确闭合——修复前块未闭合、
+   文件末尾多出的孤花括号才将其关掉，导致其后全部屏幕样式（四期⑨⑩之 :focus-visible /
+   .shortcut-help / .panel-head-ops / .panel-search / .empty-ops / .achv-batch-pick 等）落入
+   打印媒体查询、屏幕一律不生效（本次 P0 根因）；配套 CSS 结构断言见回归测试第 59 节 */
+
+/* ============================================================
+   四期⑩ 可访问性收尾（拍板①关键路径，2026-09-19）：焦点可见样式 + 快捷键帮助浮层
+   ============================================================ */
+
+/* 键盘焦点可见（:focus-visible 微增量，R3 风格一致——主色描边 + soft 光晕，鼠标点击不触发） */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* 快捷键帮助浮层（? 键开关，R7 不弹窗——固定角卡行内呈现，Esc/关闭按钮可收） */
+.shortcut-help {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  width: 340px;
+  padding: 16px 18px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-pop);
+  z-index: var(--z-help);
+  font-size: var(--text-md);
+}
+
+.shortcut-help h3 { font-size: var(--text-base); font-weight: 600; margin-bottom: 10px; }
+
+.shortcut-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-bottom: 8px;
+}
+
+.shortcut-row kbd {
+  flex: none;
+  min-width: 22px;
+  padding: 1px 6px;
+  font-family: inherit;
+  font-size: var(--text-sm);
+  text-align: center;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-key);
+}
+
+.shortcut-note { font-size: var(--text-sm); color: var(--color-text-secondary); margin-bottom: 10px; }
+
+/* ============================================================
+   四期⑨ 易用性与数据面板批（2026-09-19；面板头操作组/搜索框、空状态三件套、批量删除勾选）
+   ============================================================ */
+.panel-head-ops { display: flex; align-items: center; gap: var(--space-2); }
+
+.panel-search {
+  width: 160px;
+  padding: 6px var(--space-3);
+  font-size: var(--text-md);
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  outline: none;
+}
+
+.panel-search:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.empty-ops { margin-top: 14px; display: flex; justify-content: center; }
+
+.achv-batch-pick { flex: none; width: 15px; height: 15px; }
+
+/* ============================================================
+   W0 #7 移动端第二行导航（2026-09-19；3.1c「顶栏零新增入口」拍板的导航死路修正——
+   只读不等于不可导航：导航走顶栏下方独立第二行，不挤占顶栏；仅 ≤640px 渲染，
+   桌面宽屏逐字节不变；写操作红线不变（目标面板仍按各自口径分流））
+   ============================================================ */
+@media (max-width: 640px) {
+  /* W6-2：移动第二行导航对齐 W6-0 token 与按钮两尺寸规范——gap token 化、按钮均分、
+     紧凑 30px 基线（btn-topbar），当前态实心主色继承 .btn-topbar.active；写操作红线不变 */
+  .mobile-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: var(--space-2) 14px;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .mobile-nav .btn-topbar {
+    flex: 1 1 0;
+    justify-content: center;
+    padding: 0 var(--space-1);
+    font-size: var(--text-sm);
+  }
+}
+/* ============================================================
+   W3 移动端/响应式批（2026-09-20；依据《问题列表裁决_v1.0》W3 波次
+   #114/#116/#131/#195/#196·#214/#217/#219/#220/#269/#277/#279/#280
+   与《前端CSS_UX审核裁决_v1.0》#7–#11/#43–#44/#48；纯样式层增量——
+   桌面宽屏（>1100px）既有渲染逐字节不变：sticky / flex-wrap / clamp
+   仅在滚动、溢出或窄屏时生效，静止桌面态零视觉差）
+   ============================================================ */
+
+/* #8 顶栏中轴收缩兜底：长校历名省略号收口，不再挤压右侧保存灯 */
+.topbar-center { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* #9 面板头换行：操作组超宽时整体下移，不与标题挤压重叠 */
+.panel-head { flex-wrap: wrap; gap: var(--space-2); }
+
+/* #10 顶栏吸顶：长页面滚动时导航与保存灯常驻（z-50，低于横幅 100 / 帮助浮层 110）；
+   #116/#220 文字缩放适配：定高改最小高——200% 放大多行内容不裁切，单行常态高度恒 52px，
+   与改前逐字节一致 */
+.topbar { position: sticky; top: 0; z-index: var(--z-sticky); height: auto; min-height: 52px; }
+
+/* #11 内容最大宽度：超宽屏阅读行宽收敛（D8 桌面优先；≤1280px 视口渲染不变） */
+.main-area { width: 100%; max-width: 1280px; margin: 0 auto; }
+
+/* #43 周格横滚冻结：横向滚动时节次角列 / 节次标签钉左、天表头钉顶（静止渲染不变） */
+.wg-corner, .wg-period { position: sticky; left: 0; z-index: var(--z-grid-head); }
+.wg-dayhead { position: sticky; top: 0; z-index: var(--z-grid-day); }
+.wg-corner { z-index: var(--z-grid-corner); }
+
+/* #48 帮助浮层宽度 clamp：窄视口不溢出屏幕 */
+.shortcut-help { width: auto; min-width: 280px; max-width: min(340px, calc(100vw - 40px)); }
+
+/* #7 顶栏窄屏再降阶：≤900px 隐藏图标、收敛内距（>1100px 桌面路径逐字节不变） */
+@media (max-width: 900px) {
+  /* W6-2：窄屏溢出收敛——9 入口横滚兜底，不再挤压顶栏中轴与保存灯 */
+  .topbar-nav { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .topbar-nav::-webkit-scrollbar { display: none; }
+  .btn-topbar { flex: none; padding: 5px 6px; font-size: var(--text-xs); gap: var(--space-1); }
+  .btn-topbar svg { display: none; }
+}
+
+/* #277 平板 641–900px 断点：表单单列、面板头操作区可换行、数据双卡收单列 */
+@media (min-width: 641px) and (max-width: 900px) {
+  .main-area { padding: 16px 18px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .panel-head-ops { flex-wrap: wrap; }
+  .data-grid { grid-template-columns: 1fr; }
+}
+
+/* #114/#217 减少动态偏好：全局动画 / 过渡近零时长，保存呼吸灯停止（前庭敏感用户） */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .save-dot.save-saving { animation: none; }
+}
+
+/* #219 高对比模式：选中态与主操作补边框，状态语义不依赖底色 */
+@media (forced-colors: active) {
+  .btn-topbar.active, .break-chip input:checked + span,
+  .week-dot input:checked + span, .btn-primary { border: 1px solid ButtonText; }
+}
+
+/* #196/#214/#44 触屏批：按钮与 chips 最小 44px 触控目标、去双击缩放延迟；周格行高与色块间距放宽 */
+@media (pointer: coarse) {
+  button, .btn-sec, .btn-danger, .btn-primary, .btn-topbar, .btn-icon,
+  .break-chip span, .week-dot span {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+  .wg-cell { min-height: 56px; }
+  .wg-block { margin: 3px; padding: 5px 8px; }
+  /* #195 触屏 title 失效替代：色块名称允许换行全量可见，不依赖悬停 title */
+  .wg-block-name { white-space: normal; }
+}
+
+/* ============================================================
+   W4-B aria 可访问性批（2026-09-20）：skip-link / fieldset·legend 配套样式
+   ============================================================ */
+
+/* #215/#58：跳到主内容链接——平时视觉上隐藏（absolute 移出视口），:focus 时置顶可见 */
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: 16px;
+  z-index: var(--z-skip);
+  padding: var(--space-2) 14px;
+  font-size: var(--text-md);
+  color: #fff;
+  background: var(--color-primary);
+  border-radius: var(--radius-control);
+  transition: top .15s;
+}
+
+.skip-link:focus { top: 8px; }
+
+/* #225：分组选择语义 fieldset/legend——重置浏览器默认边框/内距，legend 视觉与 .field label 逐字节一致 */
+fieldset.field {
+  border: 0;
+  margin: 0 0 14px;
+  padding: 0;
+  min-width: 0;
+}
+
+fieldset.field legend {
+  display: block;
+  font-size: var(--text-md);
+  font-weight: 500;
+  margin-bottom: 6px;
+  padding: 0;
+}
+
+
+/* ============================================================
+   W4-F：进度列比例条（问题列表 #160；纯 CSS 宽度条，复用主色与底色变量，零新增色板）
+   ============================================================ */
+.stat-prog { display: flex; flex-direction: column; gap: var(--space-1); min-width: 150px; }
+.stat-prog-text { font-size: var(--text-sm); color: var(--color-text-secondary); white-space: nowrap; }
+.stat-prog-bar { display: block; height: 6px; border-radius: var(--radius-pill); background: var(--color-bg); overflow: hidden; }
+.stat-prog-bar i { display: block; height: 100%; background: var(--color-primary); border-radius: var(--radius-pill); }
+
+/* ============================================================
+   W4-E 拍板⑥：排课项地点行内编辑（#150 试点；两条微样式，R3 与既有控件同口径）
+   ============================================================ */
+.entry-loc-form { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+.entry-loc-input {
+  width: 130px;
+  padding: 6px var(--space-3);
+  font-size: var(--text-md);
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  outline: none;
+}
+
+.entry-loc-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+/* ============================================================
+   W4-D 自定义危险确认弹层（UX 裁决 #6；v1.78 拍板①：仅替换原生 confirm 外观层）
+   ============================================================ */
+.danger-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 41, 55, .45);
+  z-index: var(--z-modal);   /* 高于横幅 100 / 帮助浮层 110——模态须压一切 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+.danger-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 22px 24px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-pop);
+}
+
+.danger-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-danger);
+  margin-bottom: 8px;
+}
+
+.danger-msg {
+  font-size: var(--text-md);
+  color: var(--color-text);
+  margin-bottom: 18px;
+  white-space: pre-line;   /* 级联范围等多行人话文案分行承载 */
+}
+
+/* 确认键：实心危险色（R3——与 btn-primary 同尺寸口径，仅色相区分；btn-danger 描边态留给行内小按钮） */
+.danger-ok {
+  min-height: var(--btn-height-regular);
+  padding: 0 var(--space-4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-base);
+  font-weight: 500;
+  font-family: inherit;
+  color: #fff;
+  background: var(--color-danger);
+  border: none;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.danger-ok:hover { background: #b42318; }
+
+/* 触屏目标批（W3 #196 同精神）：弹层两键最小 44px */
+@media (pointer: coarse) {
+  .danger-ok, .danger-card .btn-sec { min-height: 44px; }
+}
+
+/* ============================================================
+   W6-4 业绩面板批（2026-09-21；拍板①②③落点，纯样式层增量——
+   五卡收纳为「工具区」一卡：摘要行 + 四分区同一节奏；次级折叠灰底收边；
+   hint 统一 .hint-line 置底一行；紧凑：输入框 32px 高。桌面宽屏既有面板
+   逐字节不变——本批类名全部为业绩面板新增，无存量规则改写）
+   ============================================================ */
+
+/* 工具区一卡：默认折叠（原生 <details>，纯 CSS 展开，触屏点按可用） */
+.tool-card { background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-card); box-shadow: var(--shadow-card); margin-bottom: var(--space-4); }
+.tool-card > summary { list-style: none; cursor: pointer; display: flex; align-items: center;
+  justify-content: space-between; padding: 14px var(--space-5); }
+.tool-card > summary::-webkit-details-marker { display: none; }
+.tool-card[open] > summary { border-bottom: 1px solid var(--color-border); }
+.tool-summary-title { font-size: var(--text-base); font-weight: 600; }
+.tool-summary-sub { font-size: var(--text-sm); color: var(--color-text-secondary);
+  font-weight: 400; margin-left: var(--space-2); }
+.tool-caret { font-size: var(--text-sm); color: var(--color-text-secondary); flex: none; }
+
+/* 分区节奏（规律感核心）：标题 13/600 + 12px 栅格内容 + 16px 间距 */
+.tool-body { padding: var(--space-4) var(--space-5) var(--space-5); }
+.tool-section { margin-top: var(--space-4); }
+.tool-section:first-child { margin-top: 0; }
+.tool-section-title { font-size: var(--text-md); font-weight: 600; margin: 0 0 var(--space-3); }
+
+/* 次级折叠（区间导出 / 列选择与表头设置）：灰底收边、小字摘要 */
+details.sub-fold { border: 1px solid var(--color-border); border-radius: var(--radius-control);
+  background: var(--color-bg); margin-top: var(--space-2); }
+details.sub-fold > summary { cursor: pointer; padding: 8px var(--space-3); font-size: var(--text-md);
+  color: var(--color-text-secondary); list-style: none; display: flex; align-items: center; gap: 6px; }
+details.sub-fold > summary::-webkit-details-marker { display: none; }
+details.sub-fold > summary:hover { color: var(--color-primary); }
+.sub-fold-body { padding: 0 var(--space-3) var(--space-3); }
+
+/* hint 统一口径：全面板只此一种小字样式，一律置底一行（业绩面板内） */
+.hint-line { font-size: var(--text-sm); color: var(--color-text-secondary);
+  line-height: 1.7; margin-top: var(--space-3); }
+
+/* W6-4 窄屏：工具区与录入卡内距收敛、分区标题节奏保持 */
+@media (max-width: 640px) {
+  .tool-card > summary { padding: var(--space-3); }
+  .tool-body { padding: var(--space-3); }
+}
+
+/* ============================================================
+   W6-5 表单批（2026-09-21；纯样式层增量——拍板①紧凑原则全面板落地：
+   .cal-form 输入控件 32px 紧凑高；六表单 hint 已收敛 .hint-line
+   单一样式置底一行（panels.js 换类）；wizard-hint 旧规则已随换类删除（R5））
+   ============================================================ */
+.cal-form .field input[type="text"],
+.cal-form .field input[type="date"],
+.cal-form .field input[type="month"],
+.cal-form .field input[type="number"],
+.cal-form .field select {
+  min-height: 32px;
+}
+
+/* ============================================================
+   W6-8 移动端全量批（2026-09-21；纯样式层增量——全部规则仅落入
+   ≤640px 媒体查询，桌面宽屏（>640px）既有渲染逐字节不变；复用 W6-0
+   token 与既有断点值，零新增断点；3.1c「移动只读红线」零触碰——本批
+   无任何写口与事件层改动，移动周格/速记维持只读；W6-6「更多」收纳/
+   W3 触控 44px/安全区/平板断点全部沿用不动。施工样稿经用户口径确认）
+   ============================================================ */
+@media (max-width: 640px) {
+  /* 面板头操作区换行（W3 #277 平板断点同精神落窄屏）：搜索框/按钮组
+     超宽时整体下移一行，不与标题挤压重叠 */
+  .panel-head-ops { flex-wrap: wrap; }
+  /* 卡片操作区换行：W6-6 收纳后单卡仍有 2–3 个按钮，窄屏折行右对齐，
+     不撑破 .cal-card（flex 子项 min-width 归零兜底沿用） */
+  .cal-card-actions { flex-wrap: wrap; justify-content: flex-end; }
+  /* 表单操作行换行：主/次按钮纵排，与 W3 触控 44px 目标配合不拥挤 */
+  .form-actions { flex-wrap: wrap; }
+  /* 横幅队列窄屏不溢出纸面（四期⑦ 队列机制逐字不动）：最大宽 = 视口
+     减 24px 安全边距，长词强制折行 */
+  .banner { max-width: calc(100vw - 24px); overflow-wrap: anywhere; }
+  /* 危险确认弹层窄屏内距收敛（.danger-card max-width 既有口径不动） */
+  .danger-mask { padding: var(--space-4); }
+}
+
+/* ============================================================
+   W6-10 排版批（2026-09-21 v5.0 维护期；纯样式层增量——三条线互不相交：
+   ① 数据与备份：卡片留白收敛、健康检查/数据修复卡通栏（底行不再半空）；
+   ② 统计筛选区：展开态 3 列紧凑栅格＋节奏收紧——筛选条件选定后结果区直入视口
+     （配合 panels.js「筛选变更自动收起」行为锚）；
+   ③ 业绩工具区：3 列紧凑栅格＋分区节奏＋次级折叠间距收紧。
+   选择器全部新增或作用域限定（#statsFilterWrap / .tool-card / .data-*），
+   存量规则零改写；.tool-body 内距在此覆盖 W6-4 值（改后更紧凑，R5 已登记）。
+   ≤900px 两处置 3 列栅格收单列（W6-8 窄屏纪律同精神），桌面宽屏其余面板逐字节不变。 */
+.data-card { padding: 16px 20px; }
+.data-card h3 { margin-bottom: 6px; }
+.data-desc { margin-bottom: 10px; }
+.data-desc:last-child { margin-bottom: 0; }
+.data-card-wide { grid-column: 1 / -1; }
+.data-grid { align-items: start; }
+#statsFilterWrap .form-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 14px; }
+#statsFilterWrap .cal-form .field { margin-bottom: 8px; }
+#statsFilterWrap .breaks-grid { gap: 6px; }
+#statsFilterWrap .filter-group-title { margin: 0 0 6px; }
+#statsFilterWrap .filter-group-sep { margin-top: 10px; padding-top: 8px; }
+#statsFilterWrap .form-hint { margin: 0 0 10px; }
+#statsFilterWrap .form-actions { margin-top: 2px; }
+.tool-body { padding: 12px 16px 14px; }
+.tool-section { margin-top: 12px; }
+.tool-section-title { margin: 0 0 8px; }
+.tool-card .form-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 14px; }
+.tool-card .field { margin-bottom: 10px; }
+.tool-card details.sub-fold { margin-top: 8px; }
+.tool-card .sub-fold-body { padding: 0 12px 10px; }
+.tool-card .hint-line { margin-top: 8px; line-height: 1.65; }
+.tool-card .form-actions { margin-top: 2px; }
+.tool-card .paste-textarea { margin-bottom: 8px; }
+@media (max-width: 900px) {
+  #statsFilterWrap .form-grid,
+  .tool-card .form-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   W6-11 次级/折叠/弹层界面排版批（2026-09-21 随 W6-10 续；纯样式层增量——
+   全面审计结论：对账/规则/排课/课程/便签抽屉/新学期初始化主结构
+   与 W6-0 节奏一致不动，本轮收口七处真实视觉缺口：①表单全局节奏收紧
+   （字段 14→12、卡内距 20/24→18/22，与 W6-10 同向收敛；覆盖便签抽屉/
+   新学期初始化/规则草稿/钻取编辑等全部 .cal-form-card 宿主）②粘贴导入与
+   重展开预览折叠卡（.paste-card 文本域 150→110）③今日清单行内操作区
+   （调课/停课/补课/人数表单灰底卡）④危险确认弹层⑤快捷键帮助浮层
+   ⑥导入预览折叠头（同 id 冲突详情 <details> 裸头收口）⑦移动速记首屏
+   文本域（130→110）。存量断言锚点串全量存活，mandated 同步 0 处。）
+   ============================================================ */
+.cal-form .field { margin-bottom: 12px; }
+.cal-form-card { padding: 18px 22px; }
+.form-error { margin: 2px 0 8px; }
+.paste-card .paste-textarea { min-height: 110px; margin-bottom: 10px; }
+.paste-card .form-actions { margin-top: 2px; }
+.today-ops { padding: 10px 12px; }
+.today-ops .cal-form .field { margin-bottom: 10px; }
+.today-ops .form-error { margin: 2px 0 6px; }
+.danger-card { padding: 18px 20px; }
+.danger-msg { margin-bottom: 14px; }
+.shortcut-help { padding: 14px 16px; }
+.shortcut-row { margin-bottom: 6px; }
+.shortcut-note { margin-bottom: 8px; }
+details.import-preview > summary { padding: 6px 0; cursor: pointer; font-weight: 500;
+  color: var(--color-text-secondary); }
+details.import-preview > summary:hover { color: var(--color-primary); }
+.achv-quick-textarea { min-height: 110px; }
+
+/* ============================================================
+   W6-12 统计筛选区横排紧凑化（2026-09-22；三组改横排窄列——
+   #statsFilterWrap 内 .filter-groups  flex 横排、.filter-group 等分列、
+   组内 .form-grid 收单列（W6-10 的 3 列规则保留但被本规则高优先级覆盖，
+   87-3 断言锚不动）；组分隔线改列间留白承担（.filter-group-sep 在展开态隐去，
+   折叠摘要行本就不用该类，逐字节不受影响）；≤900px 横排回落纵堆。
+   控件 id/绑定/渲染文案零改动，历史断言零波及。）
+   ============================================================ */
+#statsFilterWrap .filter-groups { display: flex; gap: 20px; align-items: flex-start; }
+#statsFilterWrap .filter-group { flex: 1 1 0; min-width: 0; }
+#statsFilterWrap .filter-group .form-grid { grid-template-columns: 1fr; column-gap: 0; }
+#statsFilterWrap .filter-group .filter-group-title { margin: 0 0 8px; }
+#statsFilterWrap .filter-group-sep { display: none; }
+@media (max-width: 900px) {
+  #statsFilterWrap .filter-groups { flex-direction: column; gap: 12px; }
+}
